@@ -1,0 +1,2 @@
+def Explosion():
+    print("boom.")
