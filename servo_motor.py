@@ -37,10 +37,3 @@ def move_180_servo_full():
     GPIO.cleanup()
     
     
-move_continuous_servoCW()
-sleep(1)
-hold_angle_continuous_servo()
-sleep(1)
-move_continuous_servoCCW()
-sleep(1)
-p.stop()
