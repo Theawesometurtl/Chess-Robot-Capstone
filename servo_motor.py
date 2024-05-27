@@ -6,23 +6,41 @@ GPIO.setup(17,GPIO.OUT)
 p = GPIO.PWM(17, 50)
 p.start(0)
 
-def move_servo():
-    p.ChangeDutyCycle(12.5)
-    sleep(.5)
-    '''
-    p.ChangeDutyCycle(5)
-    sleep(.5)
-    p.ChangeDutyCycle(7.5)
-    sleep(.5)
-    p.ChangeDutyCycle(10)
-    sleep(.5)
-    p.ChangeDutyCycle(12.5)
-    sleep(.5)
-    p.ChangeDutyCycle(10)
-    sleep(.5)
-    p.ChangeDutyCycle(7.5)
-    sleep(.5)
-    '''
+def angle_to_duty(angle):
+    return float(angle) / 18 + 2
+
+def hold_angle_continuous_servo():
+    duty = angle_to_duty(97)
+    print(duty)
+    p.ChangeDutyCycle(duty)
+
+def move_continuous_servoCW():
+    duty = angle_to_duty(75)
+    print(duty)
+    p.ChangeDutyCycle(duty)
+
+def move_continuous_servoCCW():
+    duty = angle_to_duty(150)
+    print(duty)
+    p.ChangeDutyCycle(duty)
+
+        
+
+def move_180_servo_full():
+    for angle in range(1, 180):
+        duty = float(angle) / 18 + 2
+        print(duty, angle)
+        sleep(0.1)
+        p.ChangeDutyCycle(duty)
+
     p.stop()
     GPIO.cleanup()
-move_servo()
+    
+    
+move_continuous_servoCW()
+sleep(1)
+hold_angle_continuous_servo()
+sleep(1)
+move_continuous_servoCCW()
+sleep(1)
+p.stop()
