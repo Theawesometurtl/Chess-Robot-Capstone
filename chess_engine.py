@@ -30,6 +30,44 @@ def check_state():
         return True
     return False
     
+def terminal_game():
+    print("Do you want to play black, white, or random")
+    while True:
+        player_colour = input()
+        if player_colour == "random":
+            player_colour = random.choice(["white","black"])
+            print(player_colour)
+        if player_colour == "white":
+            PB = False
+            break
+        elif player_colour == "black":
+            PB = True
+            break
+        else:
+            print("invalid input")
+        print(board)
+        print()
+    if PB:
+        engine_move()
+        print(board)
+        print()
+    while True:
+        try:
+            move = input()
+            if move == "stop":
+                engine.quit()
+                break
+            board.push_san(move)
+            print(board)
+            print()
+            engine_move()
+            print(board)
+            print()
+            if check_state():
+                break
+        except:
+            print("wrong notation try again")
+
 
 
 
