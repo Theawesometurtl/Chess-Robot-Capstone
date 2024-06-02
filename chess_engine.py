@@ -7,10 +7,23 @@ engine = chess.engine.SimpleEngine.popen_uci("./stockfish/stockfish-android-armv
 limit = chess.engine.Limit(time=0.1)
 board = chess.Board()
 
+def player_move():
+    move = input()
+    if move == "resign":
+        engine.quit()
+        return True
+    board.push_san(move)
+    print(board)
+    print()
+    return False
+
 def engine_move():
     result = engine.play(board, limit)
     board.push(result.move)
-    
+    print(result.move)
+    print(board)
+    print()
+
 def check_state():
     if board.is_stalemate():
         print("stalemate")
@@ -20,12 +33,16 @@ def check_state():
         print("insufficient material")
         engine.quit()
         return True
-    elif board.can_claim_fifty_moves():
+    elif board.is_fifty_moves():
         print("fifty move rule")
         engine.quit()
         return True
-    elif board.can_claim_threefold_repitition():
-        print("threefoldrepitition")
+    elif board.is_repitition(3):
+        print("threefold repitition")
+        engine.quit()
+        return True
+    elif board.is_checkmate():
+        print("checkmate")
         engine.quit()
         return True
     return False
@@ -45,29 +62,26 @@ def terminal_game():
             break
         else:
             print("invalid input")
-        print(board)
-        print()
-    if PB:
-        engine_move()
-        print(board)
-        print()
-    while True:
-        try:
-            move = input()
-            if move == "stop":
-                engine.quit()
-                break
-            board.push_san(move)
-            print(board)
-            print()
-            engine_move()
-            print(board)
-            print()
-            if check_state():
-                break
-        except:
-            print("wrong notation try again")
+print(board)
+print()
+if PB:
+    engine_move()
 
+while True:
+    try:
+        if player_move():
+            break
+
+        if check_state():
+            break
+        
+        engine_move()
+
+        if check_state():
+            break
+
+    except:
+        print("wrong notation try again")
 
 
 
