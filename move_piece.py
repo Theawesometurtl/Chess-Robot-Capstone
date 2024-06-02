@@ -2,23 +2,36 @@ import math
 import chess
 import chess.engine
 
-def move_piece(x1: int, y1, x2: int, y2: int):
-    home = {x: -5, y: -5}
-    lift_claw()
-    move_arm(x, y)
-    open_claw()
-    lower_claw()
-    close_claw()
-    lift_claw()
-    move_arm(x2, y2)
-    lower_claw()
-    open_claw()
-    lift_claw()
-    move_claw(home.x, home.y)
+#def move_piece(x1: int, y1, x2: int, y2: int):
+    #home = {x: -5, y: -5}
+    #lift_claw()
+    #move_arm(x, y)
+    #open_claw()
+    #lower_claw()
+    #close_claw()
+    #lift_claw()
+    #move_arm(x2, y2)
+    #lower_claw()
+    #open_claw()
+    #lift_claw()
+    #move_claw(home.x, home.y)
 
-
+board = chess.Board()
 flip_num = { 0 : 7, 1 : 6, 2 : 5, 3 : 4, 4 : 3, 5 : 2, 6 : 1, 7 : 0}
 bot_colour =  "white"
+turn_colour = "white"
+
+def grab_piece(piece):
+    pass
+
+def release_piece(piece):
+    pass
+
+def defalt_position():
+    pass
+
+def move_to_piece_storage():
+    pass
 
 def get_distance_and_angle(square):
     X = ord(square[0]) - 97
@@ -38,34 +51,75 @@ def get_distance_and_angle(square):
     print("angle = " + str(round(angle , 2)) + " degrees")
 
 def move_motors(move):
-    sq1 = move[0] + move[1]
-    sq2 = move[2] + move[3]
-    Wsq3 = move[2] + str(int(move[3]) - 1)
-    Bsq3 = move[2] + str(int(move[3]) + 1)
+    if move == "O-O":
+        if turn_colour == "white":
+            get_distance_and_angle("e1")
+            grab_piece("king")
+            get_distance_and_angle("g1")
+            release_piece("King")
 
-    if board.is_capture(move):
-        if board.is_en_passant(move):
-            if turn_colour == "white":
-                capture_sq = Wsq3
-            else:
-                capture_sq = Bsq3
+            get_distance_and_angle("h1")
+            grab_piece("rook")
+            get_distance_and_angle("f1")
+            release_piece("rook")
         else:
-            capture_sq = sq2
-        
-        get_distance_and_angle(capture_sq)
-        grab_piece(board.piece_at(chess.capture_sq))
-        move_to_piece_storage()
-        release_piece(board.piece_at(chess.capture_sq))
+            get_distance_and_angle("e8")
+            grab_piece("king")
+            get_distance_and_angle("g8")
+            release_piece("King")
+
+            get_distance_and_angle("h8")
+            grab_piece("rook")
+            get_distance_and_angle("f8")
+            release_piece("rook")
+
+    elif move == "O-O-O":
+        if turn_colour == "white":
+            get_distance_and_angle("e1")
+            grab_piece("king")
+            get_distance_and_angle("c1")
+            release_piece("King")
+
+            get_distance_and_angle("a1")
+            grab_piece("rook")
+            get_distance_and_angle("d1")
+            release_piece("rook")
+        else:
+            get_distance_and_angle("e8")
+            grab_piece("king")
+            get_distance_and_angle("c8")
+            release_piece("King")
+
+            get_distance_and_angle("a8")
+            grab_piece("rook")
+            get_distance_and_angle("d8")
+            release_piece("rook")
 
 
-    get_distance_and_angle(sq1)
-    grab_piece(board.piece_at(chess.sq1))
-    get_distance_and_angle(sq2)
-    release_piece(board.piece_at(chess.sq1))
+
+    else:
+        sq1 = move[0] + move[1]
+        sq2 = move[2] + move[3]
+        Wsq3 = move[2] + str(int(move[3]) - 1)
+        Bsq3 = move[2] + str(int(move[3]) + 1)
+
+        if board.is_capture(move):
+            if board.is_en_passant(move):
+                if turn_colour == "white":
+                    capture_sq = Wsq3
+                else:
+                    capture_sq = Bsq3
+            else:
+                capture_sq = sq2
+
+            get_distance_and_angle(capture_sq)
+            grab_piece(board.piece_at(chess.capture_sq))
+            move_to_piece_storage()
+            release_piece(board.piece_at(chess.capture_sq))
+
+
+        get_distance_and_angle(sq1)
+        grab_piece(board.piece_at(chess.sq1))
+        get_distance_and_angle(sq2)
+        release_piece(board.piece_at(chess.sq1))
     defalt_position()
-
-def grab_piece(piece):
-    pass
-
-def release_piece(piece):
-    pass
